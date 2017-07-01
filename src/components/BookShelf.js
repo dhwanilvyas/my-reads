@@ -15,12 +15,12 @@ class BookShelf extends Component {
 
     this.moveBook = this.moveBook.bind(this);
     this.filterData = this.filterData.bind(this);
-    this._getData = this._getData.bind(this);
   }
 
-  _getData() {
+  componentDidMount() {
     Api.getAll()
       .then(response => {
+        console.log(response);
         this.setState({
           books: response,
           loading: false
@@ -28,14 +28,25 @@ class BookShelf extends Component {
       });
   }
 
-  componentDidMount() {
-    this._getData();
-  }
-
   moveBook(event, book) {
     Api.update(book, event.target.value)
       .then((response) => {
-        this._getData();
+        this.setState({
+          books: this.state.books.map(book => {
+            if (response.currentlyReading.indexOf(book.id) > 0) {
+              console.log(book);
+              book.shelf = 'currentlyReading';
+            }
+            if (response.wantToRead.indexOf(book.id) > 0) {
+              book.shelf = 'wantToRead';
+            }
+            if (response.read.indexOf(book.id) > 0) {
+              book.shelf = 'read';
+            }
+
+            return book;
+          })
+        })
       })
       .catch(err => {
         console.log(err);
