@@ -1,0 +1,10 @@
+.image-container {
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+select, .select {
+  width: 100%;
+}
